@@ -1,44 +1,12 @@
-# Allow-list: only the submitted files of each exercise and the project are tracked.
-# Everything else (course binaries, inputs, PDFs, handoffs, notes, logs, archives) stays local.
-/*
-!/.gitignore
-!/README.md
+# Build output
+obj-intel64/
+obj-ia32/
+*.o
 
-# ex1: ex1.zip = ex1.so + src/ex1.cpp + makefile + makefile.rules + README.txt
-!/ex1/
-/ex1/*
-!/ex1/src/
-!/ex1/ex1.so
-!/ex1/makefile
-!/ex1/makefile.rules
-!/ex1/README.txt
-
-# ex2: ex2.zip (final_zip/)
-!/ex2/
-/ex2/*
-!/ex2/final_zip/
-/ex2/final_zip/*
-!/ex2/final_zip/src/
-!/ex2/final_zip/ex2.so
-!/ex2/final_zip/makefile
-!/ex2/final_zip/makefile.rules
-!/ex2/final_zip/README.txt
-
-# ex3: ex3_sub.zip (ex3_final/ = ex3.so + src/)
-!/ex3/
-/ex3/*
-!/ex3/ex3_final/
-
-# ex4: ex4.zip = bprofile.so + src/
-!/ex4/
-/ex4/*
-!/ex4/src/
-!/ex4/bprofile.so
-
-# Final project: src/ (project.so is added once built and tested on the course VM)
-!/final_project/
-/final_project/*
-!/final_project/src/
-# Final project results: VM run log, screenshots, graph data
-!/final_project/report/
-!/final_project/results/
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db

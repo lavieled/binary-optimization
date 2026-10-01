@@ -1,23 +1,69 @@
 # Binary Optimization
 
-Technion 046275, Dynamic Binary Translation and Optimization. Pintools built with
-[Intel Pin](https://www.intel.com/content/www/us/en/developer/articles/tool/pin-a-dynamic-binary-instrumentation-tool.html) 4.0.
+My work for Technion's course 046275, *Dynamic Binary Translation and Optimization* (ex3, ex4
+and the project were done in pairs). Every tool here is a
+[Pin](https://www.intel.com/content/www/us/en/developer/articles/tool/pin-a-dynamic-binary-instrumentation-tool.html)
+tool, written in C++ against Pin 4.0 and tested on the course's Linux VM.
 
-Only the submitted files are tracked: each tool's source, makefiles, README and built `.so`.
+The repo holds exactly what was handed in for each assignment: the source, the makefiles, the
+submitted README and the built `.so`.
 
-| Folder | Assignment | Submitted files |
-|---|---|---|
-| [ex1](ex1/) | Routine profiling: call and instruction counts, register sampling (JIT) | `ex1.so`, `src/ex1.cpp`, makefiles, `README.txt` |
-| [ex2](ex2/final_zip/) | BBL and edge profiling, indirect jump targets (JIT) | `ex2.so`, `src/ex2.cpp`, makefiles, `README.txt` |
-| [ex3](ex3/ex3_final/) | Fix the probe-mode translator `btranslate.cpp` for cpugcc_r_base | `ex3.so`, `src/` |
-| [ex4](ex4/) | Optimize `bprofile.cpp`: dead-register stubs, edge-profile.csv | `bprofile.so`, `src/` |
-| [final_project](final_project/src/) | Probe-mode TC + optimized TC2: profiling, code reordering, de-virtualization | `src/`; results in `report/` (screenshots, CSVs) and `results/` (VM run log) |
+## The exercises
 
-Final project result on the course VM (printed time vs native, median of 9 rounds):
-sgcc_peak +8.5%, sgcc_base +7.4%, correct output on every binary.
+- **ex1** counts how often each routine runs and how many instructions it executes, and samples
+  register values. A warm-up in Pin's JIT mode.
+- **ex2** goes one level down: it counts every basic block and branch edge, and records where
+  indirect jumps actually go. The output is `edge-profile.csv`.
+- **ex3** is a debugging job. The course's probe-mode translator (`btranslate.cpp`) crashed on
+  `cpugcc_r_base`; we narrowed it down to the routines it translated wrong and fixed it.
+- **ex4** makes the course's profiler (`bprofile.cpp`) run on every binary and much cheaper,
+  mainly by not saving registers that are dead anyway.
 
-Build any tool (Pin 4.0), from its `src/` folder:
+Each folder looks the same: `README.txt`, the `.so`, `makefile`, `makefile.rules`, and the
+source under `src/`.
+
+## The final project
+
+The project ties it all together. `project.so` copies the program into a translation cache
+(TC) and profiles it for two seconds. Then a background thread builds an optimized second
+cache (TC2) from that profile and moves the running program into it. The goal was to beat
+the native program, run without Pin, by more than 5%, with the slow profiling time counted.
+
+We got there on the gcc binaries:
+
+| Binary | Gain vs native (median of 9 runs) |
+|---|---|
+| sgcc_peak | **+8.5%** (above 5% in all 9 runs) |
+| sgcc_base | **+7.4%** |
+| cc1 | -1.5% |
+| bzip2 | -3.7% (a 5.6 s run is too short to win back 2 s of profiling) |
+
+The output matched native in every run.
+
+![Project progression](final_project/report/progression.svg)
+
+Most of the win didn't come from where we first looked. Reordering the hot code helped only a
+little, which is what the paper the course recommends predicts for programs this size. The real
+gains came from making the profiling stubs cheap (using registers and flags that are already
+dead) and from cutting the detour every call took through Pin's bridge on its way into TC2.
+
+![Every optimization we tried](final_project/report/optimizations.svg)
+
+One bug is worth telling: sgcc_peak gave wrong output while everything else passed. Its switch
+statements read CPU flags across the indirect jump, and our code changed them right there. We
+now keep the flags with `seto`/`lahf` and use a guard that doesn't touch them (`lea` +
+`jrcxz`). Measured side by side, the fix costs nothing.
+
+- `final_project/src/`: the tool and its README (compile and run commands, thresholds, all knobs).
+- `final_project/report/`: final screenshots, the graphs, and the data behind them.
+- `final_project/results/`: the log of every VM run.
+
+## Building
+
+From any exercise folder, or from `final_project/src/`:
+
 ```bash
 make obj-intel64/<tool>.so PIN_ROOT=/path/to/pin-external-4.0-...-gcc-linux
 ```
-Each folder's `README.txt` has the exact compile and run commands.
+
+Each `README.txt` has the exact run command.
