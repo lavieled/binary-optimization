@@ -55,9 +55,7 @@ sgcc_base swung to -7% here, against +10% in run 2 on the same build (only 3 rou
 **sgcc_peak bug:** the indirect-jmp target-profiling stub and the TC2 devirt guard clobbered
 RFLAGS, and sgcc_peak has jump-table targets that read flags. Fixed afterwards (`-targ_flags`):
 flags are kept with seto/lahf in the TC stub, and a flag-free `lea`+`jrcxz` guard is used in TC2.
-WSL after the fix: sgcc_peak correct and 7.3% faster than native (3 rounds), sgcc_base
-unchanged in speed (8.49 s vs old 8.53 s, native 8.90 s), and cc1 and bzip2 correct.
-This must be re-run on the VM.
+The fixed build was re-run on the VM: see runs 5-8.
 
 ## Run 4: all binaries again, old build, 3 rounds (`vm_all_binaries_old_build_run2.png`)
 
@@ -135,4 +133,3 @@ Per round:
 
 ## For comparison
 - Old build (e737728d) on the same VM: 10.77 s vs native 8.90 s, 21% slower.
-- WSL, s4 build (before `devirt_imm`/`migrate_tc`/`tc_short_br`): 3.7% faster than native.

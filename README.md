@@ -42,12 +42,15 @@ The output matched native in every run.
 
 ![Project progression](final_project/report/progression.svg)
 
-Most of the win didn't come from where we first looked. Reordering the hot code helped only a
-little, which is what the paper the course recommends predicts for programs this size. The real
-gains came from making the profiling stubs cheap (using registers and flags that are already
-dead) and from cutting the detour every call took through Pin's bridge on its way into TC2.
+The first build already beat the same tool with everything switched off by 9.9%, but it was still
+21% slower than the native program. Since the 2 seconds of slow, profiled TC are charged in
+full, TC2 alone could not make that back. The step that crossed native was removing detours:
+every call used to pass through Pin's bridge and the TC head before reaching TC2, and frames
+already running in TC stayed there. Pointing the original entries straight into TC2, building
+TC2 for the whole image and moving running frames over took the second build from -21% to
++9.7%.
 
-![Every optimization we tried](final_project/report/optimizations.svg)
+![Optimizations measured on the VM](final_project/report/optimizations.svg)
 
 One bug is worth telling: sgcc_peak gave wrong output while everything else passed. Its switch
 statements read CPU flags across the indirect jump, and our code changed them right there. We
