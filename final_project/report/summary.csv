@@ -1,0 +1,16 @@
+run,binary,rounds,native_mean_s,tool_mean_s,mean_gain_pct,median_gain_pct,correct
+final_9rounds,sgcc_base,9,13.754,12.578,8.6,7.4,9/9
+final_9rounds,sgcc_peak,9,11.140,10.118,9.2,8.5,9/9
+final_9rounds,cc1,9,26.984,27.322,-1.3,-1.5,9/9
+final_9rounds,bzip2,9,5.632,5.838,-3.7,-3.7,9/9
+ab_10rounds,sgcc_base_new,10,11.547,10.706,7.3,7.4,10/10
+ab_10rounds,sgcc_base_old,10,11.547,11.380,1.4,6.6,10/10
+all_run2_3rounds,sgcc_base,3,15.927,14.284,10.3,6.6,3/3
+all_run2_3rounds,sgcc_peak,3,13.535,12.220,9.7,8.2,3/3
+all_run2_3rounds,cc1,3,31.510,28.440,9.7,10.4,3/3
+all_run2_3rounds,bzip2,3,6.844,6.908,-0.9,-0.1,3/3
+all_run1_3rounds,sgcc_base,3,9.027,8.380,7.2,6.2,3/3
+all_run1_3rounds,sgcc_peak,3,8.196,8.808,-7.5,3.8,3/3
+all_run1_3rounds,cc1,3,22.912,23.740,-3.6,1.9,3/3
+all_run1_3rounds,bzip2,3,4.607,4.862,-5.5,-8.5,3/3
+before_fix_3rounds,sgcc_peak,3,10.199,2.949,,,0/3

@@ -1,0 +1,11 @@
+step,environment,binary,metric,value_pct,note
+starter + our correctness fixes; full TC2 reorder + devirt,WSL,sgcc_base,vs all-off baseline (took),0.5,old main; reordering a full TC2 gave nothing
+first hot/cold build,WSL,sgcc_base,vs all-off baseline (took),24.3,ARTIFACT: 7 s TC2 build ran in TC outside the clock; wall got 4.6% worse
+hot/cold with build time fixed,WSL,sgcc_base,vs all-off baseline (took),-6.0,layout alone: no gain
++ dead-register/dead-flag stubs,WSL,sgcc_base,vs all-off baseline (took),10.6,first real gain: cheaper profiling
+VM build e737728d,course VM,sgcc_base,vs all-off baseline (took),9.9,passes the old reading of the spec
+VM build e737728d,course VM,sgcc_base,vs native,-21.0,10.77 s vs native 8.90 s: the professor compares to native -> not enough
++ entry_direct + full TC2 (s4),WSL,sgcc_base,vs native,3.7,removing Pin bridge / TC-head hops
++ devirt_imm + migrate_tc + tc_short_br (s7),course VM,sgcc_base,vs native (median of 10 rounds),9.7,wrong output on sgcc_peak (found later)
++ targ_flags fix (final),course VM,sgcc_base,vs native (median of 9 rounds),7.4,all binaries correct
++ targ_flags fix (final),course VM,sgcc_peak,vs native (median of 9 rounds),8.5,9/9 rounds above 5%
