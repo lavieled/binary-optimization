@@ -40,8 +40,6 @@ We got there on the gcc binaries:
 
 The output matched native in every run.
 
-![Project progression](final_project/report/progression.svg)
-
 The first build already beat the same tool with everything switched off by 9.9%, but it was still
 21% slower than the native program. Since the 2 seconds of slow, profiled TC are charged in
 full, TC2 alone could not make that back. The step that crossed native was removing detours:
